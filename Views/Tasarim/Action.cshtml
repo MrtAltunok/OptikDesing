@@ -1,0 +1,35 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Action</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://animejs.com/anime.min.js"></script>
+</head>
+<body>
+    <div>
+        <script type="text/javascript" language="javascript">
+            var cssSelector = anime({
+                targets: '#cssSelector .el',
+                translateX: 250
+            });
+        </script>
+        <div id="cssSelector">
+            <div class="line">
+                <div class="square el"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+﻿
+@{
+    Layout = null;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta http-equiv="content-style-type" content="text/css" />
+
+    <title>Where have I been? - Demo</title>
+    <meta name="description" content="Where have I been?" />
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #wrapper {
+            text-align: left;
+            width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #options {
+            width: 200px;
+            height: 550px;
+            border: 1px solid black;
+            float: left;
+        }
+
+        #frame {
+            width: 513px;
+            height: 550px;
+            //background-image: url("../images/UK-Map.gif");
+            background-repeat: repeat-y;
+            background-position: 0 0;
+            border: 1px solid black;
+            float: right;
+        }
+
+        #tbldevs {
+            border: 1px solid black;
+            width: 80%;
+            margin-left: 50px;
+            margin-top: 10px;
+        }
+
+            #tbldevs th {
+                text-align: center;
+                height: 50px;
+                width: 50px;
+            }
+
+            #tbldevs td {
+                height: 50px;
+            }
+
+
+        #drag1 {
+            margin-left: 15px;
+            margin-top: 15px;
+            background-image: url("../images/cf_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        #drag2 {
+            margin-left: 15px;
+            margin-top: 15px;
+            background-image: url("../images/dw_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        #drag3 {
+            margin-left: 15px;
+            margin-top: 15px;
+            background-image: url("../images/fla_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        #drag4 {
+            margin-left: 15px;
+            margin-top: 15px;
+            background-image: url("../images/flex_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        #drag5 {
+            margin-left: 15px;
+            margin-top: 15px;
+            background-image: url("../images/pdf_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        #drag6 {
+            margin-left: 15px;
+            margin-top: 15px;
+            background-image: url("../images/ps_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        .ui-draggable-helperMoving {
+            border: 1px dotted #000;
+            padding: 6px;
+            background: #fff;
+            font-size: 1.2em;
+            width: 100px;
+            height: 100px;
+        }
+
+        .ui-draggable-helperStoped {
+            border: 1px solid #000;
+            width: 5px;
+            height: 5px;
+        }
+
+
+
+        /* classes for dragged stuff */
+        .dragged1 {
+            position: absolute;
+            background-image: url("../images/cf_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        .dragged2 {
+            position: absolute;
+            background-image: url("http://icons.iconarchive.com/icons/thesquid.ink/free-flat-sample/128/bad-pig-icon.png");
+            width: 80px;
+            height: 80px;
+        }
+
+        .dragged3 {
+            position: absolute;
+            background-image: url("../images/fla_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        .dragged4 {
+            position: absolute;
+            background-image: url("../images/flex_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        .dragged5 {
+            position: absolute;
+            background-image: url("../images/pdf_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+        .dragged6 {
+            position: absolute;
+            background-image: url("../images/ps_32x32.png");
+            width: 32px;
+            height: 32px;
+        }
+
+
+        #element {
+            border: 1px solid red
+        }
+    </style>
+    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+    <script type="text/javascript">
+        google.load("jquery", "1.4.2");
+        google.load("jqueryui", "1.7.2");
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Counter
+            counter = 0;
+            //Make element draggable
+            $(".drag").draggable({
+                helper: 'clone',
+                containment: 'frame',
+
+                //When first dragged
+                stop: function (ev, ui) {
+                    var pos = $(ui.helper).offset();
+                    objName = "#clonediv" + counter
+                    $(objName).css({ "left": pos.left, "top": pos.top });
+                    $(objName).removeClass("drag");
+
+
+                    //When an existiung object is dragged
+                    $(objName).draggable({
+                        containment: 'parent',
+                        stop: function (ev, ui) {
+                            var pos = $(ui.helper).offset();
+                            console.log($(this).attr("id"));
+                            console.log(pos.left)
+                            console.log(pos.top)
+                        }
+                    });
+                }
+            });
+            //Make element droppable
+            $("#frame").droppable({
+                drop: function (ev, ui) {
+                    if (ui.helper.attr('id').search(/drag[0-5]/) != -1) {
+                        counter++;
+                        var element = $(ui.draggable).clone();
+                        element.addClass("tempclass");
+                        $(this).append(element);
+                        $(".tempclass").attr("id", "clonediv" + counter);
+                        $("#clonediv" + counter).removeClass("tempclass");
+
+                        //Get the dynamically item id
+                        draggedNumber = ui.helper.attr('id').search(/drag([0-9])/)
+                        itemDragged = "dragged" + RegExp.$1
+                        console.log(itemDragged)
+
+                        $("#clonediv" + counter).addClass(itemDragged);
+                    }
+                }
+            });
+        });
+
+    </script>
+
+
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <div id="options">
+            <div id="drag1" class="drag">ssssssssssssssssss</div> <!-- end of drag1 -->
+            <div id="drag2" class="drag">saaaaaaaaaaaaaaaaaa</div> <!-- end of drag2 -->
+            <div id="drag3" class="drag">sqqqqqqqqqqqqqqqqqq</div> <!-- end of drag3 -->
+            <div id="drag4" class="drag">swwwwwwwwwwwww</div> <!-- end of drag4 -->
+            <div id="drag5" class="drag">swweeeeeeeeeeeee</div> <!-- end of drag5 -->
+            <div id="drag6" class="drag">seeeeeefffffffff</div> <!-- end of drag6 -->
+        </div><!-- end of options -->
+        <div id="frame">
+            <span id="title"><h2>What do you know?</h2></span>
+            <table id="tbldevs" border="1" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            <span id="names">John</span>
+                        </th>
+                        <th>
+                            <span id="names">Paul</span>
+                        </th>
+                        <th>
+                            <span id="names">George</span>
+                        </th>
+                        <th>
+                            <span id="names">Ringo</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div><!-- end of frame -->
+    </div><!-- end of wrapper -->
+</body>
+</html>

@@ -1,0 +1,318 @@
+﻿
+@{
+    ViewBag.Title = "Tasarla";
+}
+
+<script type="text/javascript">
+    //function printDiv() {
+    //    var divToPrint = document.getElementById('DivIdToPrint');
+    //    var newWin = window.open('', 'Print-Window');
+    //    newWin.document.open();
+    //    newWin.document.write('<html><head>" +
+    //        "<link href='~/Content/Site.css' rel='stylesheet' type='text/css' />" +
+    //        "<link href='~/Content/themes/base/jquery-ui.min.css' rel='stylesheet' />" +
+    //        "<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' />" +
+    //        "<link href='~/Content/fontawesome-all.min.css' rel='stylesheet' />" +
+    //        "<script async src='~/Scripts/jquery-3.3.1.min.js'/>" +
+    //        "<script async src='~/Scripts/jquery-ui-1.12.1.min.js'/>" +
+    //        "<script async src='~/Scripts/bootstrap.min.js'/>" +
+
+    //        "<title ></title ></head ><body onload='window.print()'>' + divToPrint.innerHTML + '</body></html>');
+    //    newWin.document.close();
+    //    setTimeout(function () {
+    //        newWin.close();
+    //    }, 10);
+    //}
+    function printDiv() {
+        var divToPrint = document.getElementById('a5sayfa');
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write('<html><head>     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />  <link href="~/Content/fontawesome-all.min.css" rel="stylesheet" />    <script src="~/Scripts/jquery-3.3.1.min.js"/><script src="~/Scripts/jquery-ui-1.12.1.min.js"/><script src="~/Scripts/bootstrap.min.js"/></head><body onload="window.print()"> ' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.close();
+        setTimeout(function () {
+            newWin.close();
+        }, 10);
+    }
+</script>
+<script>
+        $(document).ready(function () {
+                    var x = null;
+                    $("#tur, #ornek, #ogrenci, #gozetmen, #bilgi, #ozel").draggable({
+                        helper: 'clone',
+                        cursor: 'move',
+                        tolerance: 'fit', cursorAt: { top: 56, left: 56 },
+                        revert: true
+                    });
+
+
+                    $("#a5sayfa").droppable({
+                        drop: function (e, ui) {
+                            if ($(ui.draggable)[0].id != "") {
+                                x = ui.helper.clone();
+                                ui.helper.remove();
+                                x.draggable({
+                                    helper: 'original',
+                                    cursor: 'move', tolerance: 'fit', cursorAt: { top: 56, left: 56 },
+                                    //grid: [10, 10],
+                                    drop: function (event, ui) {
+                                        $(ui.draggable).remove();
+                                    }
+                                });
+                                x.resizable({
+                                    containment: "#a5sayfa",
+                                    autoHide: true
+                                    //maxHeight: 50, minHeight: 50,
+                                    //maxWidth: 150, minWidth: 100
+                                    //handles: "n, e, s, w"// her yönden boyutlandırma
+                                });
+
+                                x.addClass('remove');
+                                x.appendTo('#a5sayfa');
+                                $('.delete').on('click', function () {
+                                    $(this).parent().parent('span').remove();
+                                });
+                                $('.delete').parent().parent('span').dblclick(function () {
+                                    $(this).remove();
+                                });
+                            }
+
+                        }
+                    });  //Silmek için
+                    $("#remove-drag").droppable({
+                        drop: function (event, ui) {
+                            $(ui.draggable).remove();
+                        },
+                        hoverClass: "remove-drag-hover",
+                        accept: '.remove'
+                    });
+
+                });
+</script>
+<style>
+    .kart {
+        font-size: 12px;
+        border: 1px solid #fe61bc;
+        font-weight: 700;
+        color: #ed088d;
+        position: center;
+        text-align: center;
+    }
+
+    .kart-body {
+        font-size: large;
+    }
+
+    .remove-drag-hover {
+        background-color: #ED4949 !important;
+    }
+
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .a5sayfa * {
+            visibility: visible;
+        }
+
+        .a5sayfa {
+            position: absolute;
+            top: 40px;
+            left: 30px;
+        }
+    }
+
+    .break {
+        page-break-before: always;
+    }
+</style>
+<blockquote>
+    <p>Optik Form Tasarla</p>
+</blockquote>
+<div class="container-fluid">
+    <a class="btn btn-success" href="#"><span class="fas fa-save fa-3x"></span></a>
+    <a class="btn btn-primary" href="#"><span class="fas fa-folder-open fa-3x"></span></a>
+    <a class="btn btn-danger" href="#" onclick="printDiv();"><span class="fas fa-print fa-3x"></span></a>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-xs-3 bg-warning">
+            <h4>Sayfa Boyutu </h4>
+            <label for="a5boyut">A5 Dikey Sayfa</label>
+            <input type="radio" name="radio-1" id="a5boyut" onclick="show1();" checked="checked">
+            <label for="a4boyut">A4 Dikey Sayfa</label>
+            <input type="radio" name="radio-1" id="a4boyut" onclick="show2();">
+            @*<label for="a5boyutyatay">A5 Yatay Sayfa</label>
+                <input type="radio" name="radio-1" id="a5boyutyatay">
+                <label for="a5boyutdikey">A4 Yatay Sayfa</label>
+                <input type="radio" name="radio-1" id="a5boyutdikey">*@
+            <label class="col-form-label">Eklenecek Nesneler</label>
+            <br style="clear:both">
+            <div class="kart  ui-widget-content" style="border-color:black; border:2px solid;" id="tur">
+                <div class="border">Kitapçık Türü</div>
+                <div class="kart-body">ⒶⒷⒸⒹⒺ</div>
+                <i style="color:black; font-size:xx-small"><i class="fas fa-edit fa-2x"></i>Lütfen kitapçık türünü işaretlemeyi unutmayınız.</i>
+            </div>
+            <hr />
+            <div class="kart ui-widget-content" id="ornek">
+                <div class="border">Örnek Kodlama</div>
+                Doğru |&nbsp;<span class="fas fa-circle " style="color:black">                    </span>
+                <div class="border">
+                    Yanlış |
+                    <i class="fas fa-adjust"></i>
+                    <i class="fas fa-bullseye"></i>
+                    <i class="far fa-dot-circle"></i>
+                    <i class="far fa-circle"></i>
+                    <i class="far fa-check-circle"></i>
+                    <i class="fab fa-quinscape"></i>
+                    <i class="fas fa-scrubber"></i>
+                    <i class="fas fa-minus-circle"></i>
+                    <i class="fab fa-cuttlefish "></i>
+                    <i class="fab fa-cloudscale "></i>
+                </div>
+            </div>
+            <hr />
+            <div class="kart ui-widget-content" style="text-align:left" id="ogrenci">
+                <div class="border" style="text-align:center">Öğrenci Bilgileri</div>
+                <div>&nbsp;Adı Soyadı |</div>
+                <div class="border">Sınıf / Şube |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Numara | </div>
+                <div>&nbsp;İlçe |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kurum Kodu |</div>
+                <div class="border">Okul Adı |</div>
+            </div>
+            <hr />
+            <div class="kart ui-widget-content" style="text-align:left" id="gozetmen">
+                <div style="text-align:center">Gözetmen Tarafından Doldurulacak Alanlar</div>
+                <div class="border">Gözetmen Bilgileri</div>
+                <div class="row ">
+                    <div class="col-md-6" style="text-align:left">Adı Soyadı</div>
+                    <div class="col-md-2 ">Öğrenci Sınava Girmedi</div>
+                    <div class="col-md-2 ">    <i class="far fa-circle"></i></div>
+                </div>
+                <div class="">İmza </div><br />
+            </div>
+            <hr />
+
+            <i data-toggle="tooltip" title="Girilen değer kendiyle 10 ile çarpılmaktadır!" style="font-size:small">Numara Uzunluğu :</i>
+            <input type="number" data-toggle="tooltip" title="Sayı giriniz!" name="sayi_1" id="sayi" value="" style="width:50px" />
+            <input type="button" value="Oluştur" name="yeninumara" class="btn btn-success btn-sm" onclick="deger()" />
+            <button class="btn btn-danger btn-sm" data-toggle="tooltip" title="Temizle!" id="sil1"><i class=" fas fa-trash"></i> </button>
+            <div class="kart ui-widget-content" id="ozel">
+                <div class="border">Bu Alanı İşaretlemeyiniz</div>
+                <div class="" id="numaraicin">
+
+                </div>
+            </div>
+            <hr />
+            <i data-toggle="alert" title="Cevap Şık Sayısı" style="font-size:small">Şık Sayısı:</i>
+            <input type="number" id="cevap_sk" name="cevapsk" value="" maxlength="1" style="width:40px" />
+            <i data-toggle="alert" title="Soru Sayısı" style="font-size:small">Soru Sayısı:</i>
+            <input type="number" id="cevap_soru" name="cevapsoru" value="" maxlength="2" style="width:40px" />
+
+            <a href="#100" onclick="cevapdeger()" data-toggle="tooltip" title="Cevap şıkları!" class="btn btn-success btn-sm"><i class="fas fa-pen-square fa-1x"></i></a>
+            <button class="btn btn-danger btn-sm" data-toggle="tooltip" title="Temizle!" id="sil2"><i class=" fas fa-trash fa-1x"></i> </button>
+            <div class="kart ui-widget-content" id="ozel" name="100">
+                <div class="border" id="baslik"></div>
+                <div class="" id="cevapicin">
+
+                </div>
+            </div>
+
+
+            <hr />
+            <div style="text-align:left;" id="bilgi">
+                <i style="color: #ed088d;font-size:xx-small">Form Dizayn Murat Altunok</i>
+
+            </div>
+        </div>
+
+        <div class="col-md-7 border" id="a5page">
+            <sayfa size="A5" id="a5sayfa" class="col-md-7">
+
+            </sayfa>
+        </div>
+        <div class="col-md-7 border backcolor" id="a4page" style="display:none">
+            <sayfa size="A4" id="a4sayfa">
+
+            </sayfa>
+        </div>
+        <div class="col-md-2">
+            <div id="remove-drag" style="background-color: #FF8B8B;" class="alert alert-dark">
+                <div style="color: #fff; font-size: 20px; text-align: center; height:100%; ">
+                    Sil<br>
+                    <span class="fas fa-trash-alt fa-4x"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function show1() {
+        document.getElementById('a5page').style.display = 'block';
+        document.getElementById('a4page').style.display = 'none';
+    }
+    function show2() {
+        document.getElementById('a5page').style.display = 'none';
+        document.getElementById('a4page').style.display = 'block';
+    }
+</script>
+<script>
+    function deger() {
+        var sayi_1 = document.getElementById("sayi").value;
+        var _carp = sayi_1 * 10;
+        for (var i = 1; i <= _carp; i++) {
+            $('#numaraicin').append('<i class="far fa-circle"></i>')
+        }
+    }
+    function cevapdeger() {
+        var deger_1 = document.getElementById("cevap_sk").value;
+        var deger_2 = document.getElementById("cevap_soru").value;
+        if (deger_1 == 2 && deger_2 != "") {
+
+            for (var i = 1; i <= deger_2; i++) {
+                $('#cevapicin').append(i + '<span style="font-size:17px;">.&nbsp;&nbsp;Ⓐ&nbsp;&nbsp;Ⓑ<br/></span>')
+            }
+        }
+        else if (deger_1 == 3 && deger_2 != "") {
+
+            for (var i = 1; i <= deger_2; i++) {
+                $('#cevapicin').append(i + '<span style="font-size:17px;">.&nbsp;&nbsp;Ⓐ&nbsp;&nbsp;Ⓑ&nbsp;&nbsp;Ⓒ<br/></span>')
+            }
+
+        } else if (deger_1 == 4 && deger_2 != "") {
+
+            for (var i = 1; i <= deger_2; i++) {
+                $('#cevapicin').append(i + '<span style="font-size:17px;">.&nbsp;&nbsp;Ⓐ&nbsp;&nbsp;Ⓑ&nbsp;&nbsp;Ⓒ&nbsp;&nbsp;Ⓓ<br/></span>')
+            }
+
+        } else if (deger_1 == 4 && deger_2 != "") {
+
+            for (var i = 1; i <= deger_2; i++) {
+                $('#cevapicin').append('<span style="font-size:17px;">.&nbsp;&nbsp;Ⓐ&nbsp;&nbsp;Ⓑ&nbsp;&nbsp;Ⓒ&nbsp;&nbsp;Ⓓ&nbsp;&nbsp;Ⓔ<br/></span>')
+            }
+
+        }
+
+    }
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#sil1").click(function () {
+            $("#numaraicin").empty();
+        });
+    });
+    $(document).ready(function () {
+        $("#sil2").click(function () {
+            $("#cevapicin").empty();
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $("input").checkboxradio();
+        $("fieldset").controlgroup();
+    });
+</script>

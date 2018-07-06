@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+}
+<style>
+    liste {
+        width: 720px;
+        float: left;
+    }
+
+    .liste div {
+        float: left;
+        width: 200px;
+        background: #EBDF8F;
+        margin: 10px;
+        padding: 10px;
+        z-index: 2;
+        cursor: move;
+    }
+
+    .liste img {
+        width: 100%;
+    }
+
+
+    /********SEPET***********/
+
+    .sepet {
+        right: 0;
+        top: 0;
+        background: #EF7375;
+        padding: 20px;
+        width: 500px;
+        min-height: 600px;
+        position: fixed;
+    }
+
+        .sepet .tasi {
+            float: left;
+            width: 100px;
+            background: #EBDF8F;
+            margin: 10px;
+            padding: 10px;
+            z-index: 2;
+        }
+
+            .sepet .tasi img {
+                width: 100%;
+            }
+</style>
+
+<script>
+    $(document).ready(function (e) {
+        $(".liste .tasi").draggable({
+            revert: true
+        });
+        $(".sepet").droppable({
+            drop: function (event, ui) {
+                //var nesne = ui.draggable;
+                //var kopya = nesne.clone();
+                //kopya.prepend("<p class='kaldir'>Kapat</p>");
+                //kopya.attr('style', '');
+                var kopya = ui.draggable.clone().prepend("<p class='kaldir'>Kaldır</p>").attr('style', '');
+                $(this).append(kopya);
+                kopya.find('.kaldir').click(function () {
+
+                    kopya.closest('.tasi').remove();
+                });
+            }
+        });
+        $(".sepet .kaldir").on('click', function () {
+            $(this).closest('.tasi').remove();
+        });
+
+    });
+
+</script>
+<div class="liste">
+    <div class="tasi" id="nesne-1">
+        <h4>Köpek</h4>
+        <input type="button" class="btn btn-dark" />
+    </div>
+    <div class="tasi" id="nesne-2">
+        <h4>Kedi</h4>
+        <input type="button" class="btn btn-primary" />
+    </div>
+    <div class="tasi" id="nesne-3">
+        <h4>Panda</h4>
+        <input type="button" class="btn btn-success" />
+    </div>
+    <div class="tasi" id="nesne-4">
+        <h4>Sincap</h4>
+        <input type="button" class="btn btn-warning" />
+    </div>
+    <div class="tasi" id="nesne-5">
+        <h4>Kaplan</h4>
+        <input type="button" class="btn btn-info" />
+    </div>
+</div>
+<div class="sepet">
+   
+</div>
